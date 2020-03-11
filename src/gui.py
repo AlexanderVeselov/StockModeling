@@ -1,5 +1,7 @@
 import ctypes
 import csv
+import matplotlib.pyplot as plt
+import numpy as np
 
 my_dll = ctypes.WinDLL("../VS2019/src/Debug/BlackScholes.dll")
 
@@ -13,5 +15,14 @@ def ReadCsv(filename):
 
 
 price_data = ReadCsv("../data/SPFB.BR-4.20_200101_200311.csv")
-float_array_type = ctypes.c_double * len(price_data)
-my_dll.BlackScholes_Foo(float_array_type(*price_data), len(price_data))
+#float_array_type = ctypes.c_double * len(price_data)
+#my_dll.BlackScholes_Foo(float_array_type(*price_data), len(price_data))
+
+fig = plt.figure()
+#ax = plt.axes(projection='3d')
+x = np.arange(0, len(price_data))
+
+plt.plot(x, price_data, label='BR-4.20 price')
+plt.legend()
+
+plt.show()
