@@ -1,7 +1,10 @@
 #include "black_scholes.h"
 #include <iostream>
 
-void BlackScholes_Foo()
+void BlackScholes_Foo(double* price_data, int data_size)
 {
-    std::cout << "Test test test" << std::endl;
+    for (int i = 0; i < data_size; ++i)
+    {
+        std::cout << price_data[i] << std::endl;
+    }
 }
