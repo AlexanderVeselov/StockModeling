@@ -1,6 +1,7 @@
 import ctypes
 import csv
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 my_dll = ctypes.WinDLL("../VS2019/src/Debug/BlackScholes.dll")
@@ -22,7 +23,13 @@ fig = plt.figure()
 #ax = plt.axes(projection='3d')
 x = np.arange(0, len(price_data))
 
-plt.plot(x, price_data, label='BR-4.20 price')
+ax = fig.add_subplot(2, 1, 1)
+ax.plot(x, price_data, label='BR-4.20 price')
+
+ax = fig.add_subplot(2, 1, 2, projection='3d')
+#ax = fig.add_subplot(111, projection='3d')
+ax.plot(x, price_data, label='BR-4.20 price11')
+
 plt.legend()
 
 plt.show()
