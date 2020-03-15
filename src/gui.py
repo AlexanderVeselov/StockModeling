@@ -23,12 +23,18 @@ fig = plt.figure()
 #ax = plt.axes(projection='3d')
 x = np.arange(0, len(price_data))
 
-ax = fig.add_subplot(2, 1, 1)
+ax = fig.add_subplot(1, 2, 1)
 ax.plot(x, price_data, label='BR-4.20 price')
 
-ax = fig.add_subplot(2, 1, 2, projection='3d')
+ax = fig.add_subplot(1, 2, 2, projection='3d')
 #ax = fig.add_subplot(111, projection='3d')
-ax.plot(x, price_data, label='BR-4.20 price11')
+
+X = np.arange(-5, 5, 0.25)
+Y = np.arange(-5, 5, 0.25)
+X, Y = np.meshgrid(X, Y)
+print(X)
+Z = np.exp(-0.5 * X**2) * np.exp(-0.5 * Y**2)
+ax.plot_surface(X, Y, Z)
 
 plt.legend()
 
