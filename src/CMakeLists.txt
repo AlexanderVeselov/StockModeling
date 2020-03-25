@@ -1,5 +1,5 @@
-set(BLACK_SCHOLES_SRC
+set(STOCK_LIB_SRC
 	black_scholes.cpp
 	black_scholes.h)
 
-add_library(BlackScholes SHARED ${BLACK_SCHOLES_SRC})
+add_library(StockLib SHARED ${STOCK_LIB_SRC})

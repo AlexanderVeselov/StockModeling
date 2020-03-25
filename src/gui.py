@@ -5,7 +5,12 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import random
 
-my_dll = ctypes.WinDLL("../VS2019/src/Debug/BlackScholes.dll")
+class StockLibDll:
+	def __init__(self, path):
+		self.dll = ctypes.WinDLL(path)
+
+	def CalculateEMA():
+		self.dll(float_array_type(*price_data), len(price_data))
 
 def ReadCsv(filename):
 	close_data = []
@@ -34,24 +39,47 @@ def CalcEMA(input_data, hysteresis):
 		output_ema.append(ema)
 	return output_ema
 
+def CalcStochasticOscillator(price_data, window_size):
+	result = []
+	for i in range(len(price_data)):
+		current_price = price_data[i]
+		min_price = current_price
+		max_price = current_price
+		for window_offset in range(1, window_size):
+			j = i - window_offset
+			if j > 0:
+				min_price = min(min_price, price_data[j])
+				max_price = max(max_price, price_data[j])
+		denom = max_price - min_price
+		stochastic_osc_value = (current_price - min_price) / denom if denom > 0 else 0
+		result.append(stochastic_osc_value)
+
+	return result
+
 num_columns = 1
 
-#price_data = ReadCsv("../data/SPFB.BR-4.20_200101_200311.csv")
+stock_lib = ctypes.WinDLL("../VS2019/src/Debug/StockLib.dll")
+stock_lib.Ping()
+
+price_data = ReadCsv("../data/SPFB.BR-4.20_200101_200311.csv")
 #float_array_type = ctypes.c_double * len(price_data)
 #my_dll.BlackScholes_Foo(float_array_type(*price_data), len(price_data))
 
 fig = plt.figure()
 #ax = plt.axes(projection='3d')
-x = np.arange(0, 1000)
+x = np.arange(0, len(price_data))
 
-ax = fig.add_subplot(1, num_columns, 1)
+ax = fig.add_subplot(2, num_columns, 1)
 
-for i in range(0, 3):
-	price_data = GenerateStockPrices(len(x), 1.0)
-	ax.plot(x, price_data)
-	price_ema = CalcEMA(price_data, 0.9)
-	ax.plot(x, price_ema)
+#price_data = GenerateStockPrices(len(x), 1.0)
+ax.plot(x, price_data)
+price_ema = CalcEMA(price_data, 0.9)
+ax.plot(x, price_ema)
 
+ax = fig.add_subplot(2, num_columns, 2)
+stochastic_data = CalcStochasticOscillator(price_data, 20)
+ax.plot(x, stochastic_data)
+ax.grid()
 #ax = fig.add_subplot(1, num_columns, 2, projection='3d')
 ##ax = fig.add_subplot(111, projection='3d')
 #
